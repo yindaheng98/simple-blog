@@ -4,7 +4,10 @@ html(lang="zh-CN")
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         title= title
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/3.0.1/github-markdown.css')
-        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/katex@0.11.0/dist/katex.min.css')
+        link(rel='stylesheet', href='https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css')
         link(rel='stylesheet', href=csspath + 'stylesheets/style.css')
     body
         block content
+    script(src="https://unpkg.com/mermaid/dist/mermaid.min.js")
+    script.
+        mermaid.initialize({startOnLoad:true});

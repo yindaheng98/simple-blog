@@ -1,11 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var fs = require('fs');
-var showdown = require('showdown');
-showdown.setOption('tables', true);
-showdown.setFlavor('github');
-var texrender = require('../Extensions/texrender');
+var mdit = require('markdown-it')({html: true});
 var mermaidrender=require('../Extensions/mermaidrender');
+mdit.use(require("@neilsustc/markdown-it-katex"));
 
 /* GET home page. */
 router.get(/.*\.md$/, function (req, res, next) {
@@ -15,9 +13,8 @@ router.get(/.*\.md$/, function (req, res, next) {
             console.log(err);
             next(req, res);
         } else {
-            let converter = new showdown.Converter();
-            let text = mermaidrender(texrender(data.toString()));
-            let html = converter.makeHtml(text);
+            let text = mermaidrender(data.toString());
+            let html = mdit.render(text);
             let title = text.substring(text.indexOf('#') + 1, text.indexOf('\n'));
             let csspath = md.replace(/[^\/]/g, '').slice(1).split('/').join('../');
             res.render('index', {title: title, contents: html, csspath: csspath});
@@ -63,10 +60,9 @@ function parseIndex(index, indent) {
 
 /* GET home page. */
 router.get('/index', function (req, res, next) {
-    let converter = new showdown.Converter();
     let index = getIndex('md', '');
     let text = '# 目录\n' + parseIndex(index, '');
-    let html = converter.makeHtml(text);
+    let html = mdit.render(text);
     res.render('index', {title: '目录', contents: html, csspath: ''});
 });
 
