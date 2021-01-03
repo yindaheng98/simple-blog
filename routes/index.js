@@ -15,7 +15,8 @@ router.get(/.*\.md$/, function (req, res, next) {
         } else {
             let text = mermaidrender(data.toString());
             let html = mdit.render(text);
-            let title = text.substring(text.indexOf('#') + 1, text.indexOf('\n'));
+            let title = /#\s+(.*?)\n/.exec(text)[1];
+            if(!title) title = "!no title!";
             let csspath = md.replace(/[^\/]/g, '').slice(1).split('/').join('../');
             res.render('index', {title: title, contents: html, csspath: csspath});
         }
