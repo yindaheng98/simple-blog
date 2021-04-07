@@ -35,7 +35,7 @@ function getIndex(path, parent_name) {
             }
             if (files[i].slice(-3) === '.md' && fs.statSync(filepath).isFile()) {
                 let text = fs.readFileSync(filepath).toString();
-                let title = text.substring(text.indexOf('#') + 1, text.indexOf('\n')).replace('\r', '');
+                let title = " " + /#\s+(.*?)\n/.exec(text)[1];
                 index[title] = parent_name + files[i];
             }
         } catch (e) {
